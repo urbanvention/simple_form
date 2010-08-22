@@ -69,16 +69,29 @@ module SimpleForm
       #                 item or an array of items.
       #
       def collection_check_boxes(attribute, collection, value_method, text_method, options={}, html_options={})
-        collection.map do |item|
+        @html = collection.map do |item|
           value = item.send value_method
           text  = item.send text_method
 
           default_html_options = default_html_options_for_collection(item, value, options, html_options)
           default_html_options[:multiple] = true
-
-          check_box(attribute, default_html_options, value, '') <<
+          
+          @checkbox = check_box(attribute, default_html_options, value, '') <<
             label("#{attribute}_#{value}", text, :class => "collection_check_boxes")
+            
+          if html_options[:wrap_element_tag]
+            @checkbox = template.content_tag(html_options[:wrap_element_tag], @checkbox)
+          else
+            @checkbox
+          end
+          
         end.join.html_safe
+        
+        if html_options[:wrap_list_tag]
+          return template.content_tag(html_options[:wrap_list_tag], @html.html_safe).html_safe
+        else
+          return @html.html_safe
+        end
       end
 
       # Wrapper for using simple form inside a default rails form.
