@@ -78,13 +78,10 @@ module SimpleForm
           
           @checkbox = check_box(attribute, default_html_options, value, '') <<
             label("#{attribute}_#{value}", text, :class => "collection_check_boxes")
-            
+          
           if html_options[:wrap_element_tag]
             @checkbox = template.content_tag(html_options[:wrap_element_tag], @checkbox)
-          else
-            @checkbox
           end
-          
         end.join.html_safe
         
         if html_options[:wrap_list_tag]
